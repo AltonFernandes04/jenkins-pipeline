@@ -1,35 +1,47 @@
 pipeline {
     agent any 
+
+    parameters {
+        string(name: 'str1', defaultValue: '', description: '')
+        booleanParam(name: 'str2', defaultValue: true, description: '')
+    }
+
     stages {
         stage('Static Analysis') {
             steps {
-                echo 'Run the static analysis to the code' 
+                echo "Running static analysis for version ${params.APP_VERSION}"
+                echo 'Run the static analysis on the code'
             }
         }
         stage('Compile') {
             steps {
-                echo 'Compile the source code' 
+                echo "Compiling the source code for version ${params.APP_VERSION}"
+                echo 'Compile the source code'
             }
         }
         stage('Security Check') {
             steps {
-                echo 'Run the security check against the application' 
+                echo 'Run the security check against the application'
             }
         }
         stage('Run Unit Tests') {
             steps {
-                echo 'Run unit tests from the source code' 
+                echo 'Run unit tests from the source code'
             }
         }
         stage('Run Integration Tests') {
+            when {
+                expression { return params.RUN_INTEGRATION_TESTS }
+            }
             steps {
-                echo 'Run only crucial integration tests from the source code' 
+                echo 'Running crucial integration tests from the source code'
             }
         }
         stage('Publish Artifacts') {
             steps {
-                echo 'Save the assemblies generated from the compilation' 
+                echo 'Saving the assemblies generated from the compilation'
             }
         }
     }
 }
+
